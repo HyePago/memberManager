@@ -10,7 +10,9 @@ import kr.hs.hejinkim.membermanager.assembler.Assembler;
 import kr.hs.hejinkim.membermanager.spring.AlreadyExistingMemberException;
 import kr.hs.hejinkim.membermanager.spring.ChangePasswordService;
 import kr.hs.hejinkim.membermanager.spring.IdPasswordNotMatchingException;
+import kr.hs.hejinkim.membermanager.spring.MemberListPrinter;
 import kr.hs.hejinkim.membermanager.spring.MemberNotFoundException;
+import kr.hs.hejinkim.membermanager.spring.MemberPrinter;
 import kr.hs.hejinkim.membermanager.spring.MemberRegisterService;
 import kr.hs.hejinkim.membermanager.spring.RegisterRequest;
 
@@ -35,9 +37,18 @@ public class MainForSpring {
 			} else if (command.startsWith("change ")) {
 				processChangeCommand(command.split(" "));
 				continue;
+			} else if (command.startsWith("list")) {
+				processListCommand();
+				continue;
 			}
+			
 			printHelp();
 		}
+	}
+
+	private static void processListCommand() {
+		MemberListPrinter mp = ctx.getBean("listPrinter", MemberListPrinter.class);
+		mp.printAll();		
 	}
 
 	private static Assembler assembler = new Assembler();
