@@ -10,11 +10,13 @@ import kr.hs.hejinkim.membermanager.assembler.Assembler;
 import kr.hs.hejinkim.membermanager.spring.AlreadyExistingMemberException;
 import kr.hs.hejinkim.membermanager.spring.ChangePasswordService;
 import kr.hs.hejinkim.membermanager.spring.IdPasswordNotMatchingException;
+import kr.hs.hejinkim.membermanager.spring.MemberInfoPrinter;
 import kr.hs.hejinkim.membermanager.spring.MemberListPrinter;
 import kr.hs.hejinkim.membermanager.spring.MemberNotFoundException;
 import kr.hs.hejinkim.membermanager.spring.MemberPrinter;
 import kr.hs.hejinkim.membermanager.spring.MemberRegisterService;
 import kr.hs.hejinkim.membermanager.spring.RegisterRequest;
+import kr.hs.hejinkim.membermanager.spring.VersionPrinter;
 
 public class MainForSpring {
 	private static GenericXmlApplicationContext ctx; // static 메서드에서 일반 변수에 접근 할 수 없기 때문에, static으로 선언함.
@@ -40,10 +42,32 @@ public class MainForSpring {
 			} else if (command.startsWith("list")) {
 				processListCommand();
 				continue;
+			} else if (command.startsWith("info ")) {
+				processInfoCommand(command.split(" "));
+				continue;
+			}  else if (command.startsWith("version ")) {
+				processVersionCommand();
+				continue;
 			}
 			
 			printHelp();
 		}
+	}
+
+	private static void processVersionCommand() {
+		VersionPrinter versionPrinter =
+				ctx.getBean("versionPrinter", VersionPrinter.class);
+		versionPrinter.print();
+	}
+
+	private static void processInfoCommand(String[] arg) {
+		if (arg.length != 2) {
+			printHelp();
+			return;
+		}
+		MemberInfoPrinter infoPrinter =
+				ctx.getBean("infoPrinter", MemberInfoPrinter.class);
+		infoPrinter.printMemberInfo(arg[1]);
 	}
 
 	private static void processListCommand() {

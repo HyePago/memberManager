@@ -19,4 +19,22 @@
 		<constructor-arg ref="memberDao" />
 		<constructor-arg ref="memberPrinter" />
 	</bean>
+	
+	<bean id="infoPrinter" class="kr.hs.hejinkim.membermanager.spring.MemberInfoPrinter">
+		<property name="memberDao" ref="memberDao"></property>
+		<property name="printer" ref="memberPrinter"></property>
+	</bean>
+	
+	<!-- 생성자 방식 
+	<bean id"versionPrint" class="kr.hs.hejinkim.membermanager.spring.VersionPrinter">
+		<constructor-arg name="minorVersion" value="3" />
+		<constructor-arg name="majorVersion" value="5" />
+	</bean>
+	-->
+	<bean id="versionPrinter" class="kr.hs.hejinkim.membermanager.spring.VersionPrinter">
+		<property name="majorVersion" value="5"></property>
+		<property name="minorVersion"><value>3</value></property>
+	</bean>
+	<!--  value태그를 쓰는 이유: enter가 들어갈 수 있기 때문 -->
+	<!-- property 중 하나를 안쓰면 0 or null 과 같은 값을 넘겨줌. -> 논리적 에러나기 쉽상 -->
 </beans>
